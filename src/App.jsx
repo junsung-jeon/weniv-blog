@@ -12,7 +12,7 @@ import './styles/global.css';
 export default function App() {
   return (
     <AuthProvider>
-      <BrowserRouter>
+      <BrowserRouter basename="/weniv-blog">
         <Header />
         <Routes>
           <Route path="/"          element={<HomePage />} />
