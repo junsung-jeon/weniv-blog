@@ -15,7 +15,8 @@ function formatDate(str) {
 }
 
 export default function PostCard({ post, searchQuery }) {
-  const thumb = post.thumbnail || FALLBACK_IMGS[post.id % FALLBACK_IMGS.length];
+  const postId = post.index ?? post.id ?? post.post_id ?? post.blog_id ?? post._id;
+  const thumb = post.thumbnail || FALLBACK_IMGS[Number(postId) % FALLBACK_IMGS.length];
 
   const highlight = (text) => {
     if (!searchQuery || !text) return text;
@@ -29,7 +30,7 @@ export default function PostCard({ post, searchQuery }) {
   };
 
   return (
-    <Link to={`/post/${post.id}`} style={styles.card} className="fade-up">
+    <Link to={`/post/${postId}`} style={styles.card} className="fade-up">
       <div style={styles.thumbWrap}>
         <img src={thumb} alt={post.title} style={styles.thumb}
           onError={e => { e.target.src = FALLBACK_IMGS[0]; }} />

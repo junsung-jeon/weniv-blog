@@ -16,8 +16,9 @@ export default function HomePage() {
   useEffect(() => {
     api.getPosts()
       .then(data => {
-        console.log('API 응답:', data);
-        setPosts(Array.isArray(data) ? data : []);
+        const arr = Array.isArray(data) ? data : [];
+        localStorage.setItem('cachedPosts', JSON.stringify(arr));
+        setPosts(arr);
       })
       .catch(() => setPosts([]))
       .finally(() => setLoading(false));
@@ -98,7 +99,7 @@ export default function HomePage() {
           ) : (
             <div style={styles.grid}>
               {filtered.map((post, i) => {
-                const postId = post.id ?? post.post_id ?? post.blog_id ?? post._id ?? i;
+                const postId = post.index ?? post.id ?? post.post_id ?? post.blog_id ?? post._id ?? i;
                 return (
                   <div key={postId} style={{ animationDelay: `${i * 0.06}s` }}>
                     <PostCard post={post} searchQuery={search} />

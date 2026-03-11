@@ -11,20 +11,16 @@ export default function AISummary({ content }) {
     setOpen(true);
     setSummary('');
     try {
-      const res = await fetch('https://api.anthropic.com/v1/messages', {
+      const res = await fetch('https://dev.wenivops.co.kr/services/openai-api', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          model: 'claude-sonnet-4-20250514',
-          max_tokens: 1000,
-          messages: [{
-            role: 'user',
-            content: `다음 블로그 글을 3~5문장으로 핵심만 간결하게 한국어로 요약해줘:\n\n${content}`,
-          }],
-        }),
+        body: JSON.stringify([
+          { role: 'system', content: '당신은 블로그 글을 간결하게 요약해주는 도우미입니다.' },
+          { role: 'user', content: `다음 블로그 글을 3~5문장으로 핵심만 간결하게 한국어로 요약해줘:\n\n${content}` },
+        ]),
       });
       const data = await res.json();
-      const text = data.content?.find(b => b.type === 'text')?.text || '요약에 실패했습니다.';
+      const text = data.choices?.[0]?.message?.content || '요약에 실패했습니다.';
       setSummary(text);
     } catch {
       setSummary('요약 중 오류가 발생했습니다.');

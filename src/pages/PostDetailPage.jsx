@@ -32,7 +32,12 @@ export default function PostDetailPage() {
   useEffect(() => {
     api.getPost(id)
       .then(setPost)
-      .catch(() => navigate('/'))
+      .catch(() => {
+        const cached = JSON.parse(localStorage.getItem('cachedPosts') || '[]');
+        const found = cached.find(p => p.index === id || p.id === id || p._id === id);
+        if (found) setPost(found);
+        else navigate('/');
+      })
       .finally(() => setLoading(false));
   }, [id]);
 
@@ -49,7 +54,7 @@ export default function PostDetailPage() {
   if (!post) return null;
 
   const isOwner = user && (user.username === post.username || user.username === post.author);
-  const thumb = post.thumbnail || FALLBACK_IMGS[post.id % FALLBACK_IMGS.length];
+  const thumb = post.thumbnail || FALLBACK_IMGS[Number(post.index ?? post.id) % FALLBACK_IMGS.length];
   const authorColor = (post.username || post.author || '').charCodeAt(0) % AVATAR_COLORS.length;
 
   const now = new Date();

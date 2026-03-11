@@ -33,8 +33,8 @@ export default function PostWritePage({ isEdit }) {
         await api.updatePost(id, form);
         navigate(`/post/${id}`);
       } else {
-        const res = await api.createPost(form);
-        navigate(`/post/${res.id || res.post_id || ''}`);
+        await api.createPost(form);
+        navigate('/');
       }
     } catch (e) {
       alert(e.message || '저장 실패');
