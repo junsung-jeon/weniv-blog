@@ -1,6 +1,7 @@
 # My Blog — React 개인 블로그 프로젝트
 
 <br/>
+ffmpeg -i input.mp4 -an -vcodec libx264 -crf 28 output.mp4
 
 ## 목차
 
